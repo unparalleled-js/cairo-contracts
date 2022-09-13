@@ -1,23 +1,10 @@
 import pytest
-from utils import TRUE, FALSE, assert_revert, get_contract_class, State
 
 
-@pytest.mark.asyncio
-async def test_initializer():
-    starknet = await State.init()
-    initializable = await starknet.deploy(
-        contract_class=get_contract_class("Initializable")
-    )
-    expected = await initializable.initialized().call()
-    assert expected.result == (FALSE,)
+@pytest.fixture
+def initializable(project):
+    return project.security.initializable.library
 
-    await initializable.initialize().execute()
 
-    expected = await initializable.initialized().call()
-    assert expected.result == (TRUE,)
+def test_initializer():
 
-    # second initialize invocation should revert
-    await assert_revert(
-        initializable.initialize().execute(),
-        reverted_with="Initializable: contract already initialized"
-    )
