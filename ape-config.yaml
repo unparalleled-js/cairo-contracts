@@ -1,0 +1,4 @@
+name: openzeppelin-cairo-contracts
+version: v0.4.0b
+
+contracts_folder: src
